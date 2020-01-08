@@ -12,7 +12,6 @@ odoo.define('renderlistcontent.renderer', function (require) {
      */
 
     const core = require('web.core');
-    const ajax = require('web.ajax');
     const registry = require('web.field_registry');
     const relational_fields = require('web.relational_fields');
     const FieldMany2ManyTags = relational_fields.FieldMany2ManyTags;
