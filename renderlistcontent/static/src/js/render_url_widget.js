@@ -95,6 +95,11 @@ odoo.define('renderlistcontent.renderer', function (require) {
                     } else if (prop.indexOf('description') > -1) {
                         props[1] = _t(meta.content);
                     } else if (prop.indexOf('image') > -1) {
+                        if (meta.content.indexOf('http') === -1) {
+                            const tmp = new URL(url); 
+                            meta.content = tmp.origin + meta.content
+                        }
+
                         props[2] = meta.content;
                     }
                 }

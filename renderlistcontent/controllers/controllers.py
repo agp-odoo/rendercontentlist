@@ -27,8 +27,10 @@ class MyHTMLParser(HTMLParser):
             for a in attrs:
                 if 'content' in a[0] and state == 3 and 'http' in a[1]:
                     self.res[2] = a[1]
+                    state = 0
                 elif 'content' in a[0] and state > 0:
                     self.res[state - 1] = a[1]
+                    state = 0
 
         elif tag == 'link':
             found = False
