@@ -44,7 +44,7 @@ odoo.define('renderlistcontent.renderer', function (require) {
         },
 
         /**
-         * @private
+         * @override
          */
         _renderTags: function () {
             const parsed = this._parsedContent();
