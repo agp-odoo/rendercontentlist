@@ -62,6 +62,7 @@ class RenderListContent(http.Controller):
         parser.found_title = False
         parser.res = ['Error', '', '/renderlistcontent/static/src/img/404PageNotFound.png']
         parser.feed(mystr)
+        parser.close()
 
         if '/renderlistcontent/static/src/img/404PageNotFound.png' in parser.res[2] and not ('Error' in parser.res[0]):
             parser.res[2] = 'https://' + url + '/favicon.ico'
