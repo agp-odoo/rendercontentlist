@@ -36,7 +36,7 @@ odoo.define('renderlistcontent.renderer', function (require) {
             content: {type: 'text'},
         },
 
-        /**
+        /**this.contentToLoad.length
          * @private
          */
         _getRenderTagsContext: function () {
@@ -58,21 +58,18 @@ odoo.define('renderlistcontent.renderer', function (require) {
             if (!this.contentToLoad || !this.contentToLoad.length) return;
             for (let i = 0; i < this.contentToLoad.length; i++) {
                 const c = this.contentToLoad[i];
-                const e = document.getElementsByName(c);
-                for (let j = 0; j < e.length; j++) {
-                    const d = e[j];
-                    const url = d.getAttribute('data-url');
-                    if (!url) continue;
-                    this._grabURLdetails(url, (res) => {
-                        d.innerHTML = `
-                            <a href='${url}' target='_blank'>
-                                <strong>${_t(res[0])}</strong>
-                            </a>
-                            <p>${_t(res[1])}</p>
-                            <img src='${_t(res[2])}'/>
-                        `;
-                    });
-                }
+                const e = document.getElementById(c);
+                const url = e.getAttribute('data-url');
+                if (!url) continue;
+                this._grabURLdetails(url, (res) => {
+                    e.innerHTML = `
+                        <a href='${url}' target='_blank'>
+                            <strong>${_t(res[0])}</strong>
+                        </a>
+                        <p>${_t(res[1])}</p>
+                        <img src='${_t(res[2])}'/>
+                    `;
+                });
             }
         },
 
@@ -123,7 +120,7 @@ odoo.define('renderlistcontent.renderer', function (require) {
         /**
          * @private
          */
-        _checkExtension: function (string) {
+        _checkExtension: function (string, uid) {
             if (!string) return '';
             const suffix = string.substring(string.lastIndexOf('.'));
             if (suffix.indexOf('.png') > -1 || suffix.indexOf('.jpg') > -1 || suffix.indexOf('.jpeg') > -1 || suffix.indexOf('.gif') > -1 || suffix.indexOf('.svg') > -1) {
@@ -132,10 +129,10 @@ odoo.define('renderlistcontent.renderer', function (require) {
                 return `<video controls><source src="${string}"> This browser does not support video tag.</video>`;
             } else {
                 if (!this.contentToLoad) this.contentToLoad = [];
-                const id = 'loading-' + this.contentToLoad.length;
+                const id = 'loading-' + uid;
                 this.contentToLoad.push(id);
                 return `
-                <div name="${id}" data-url="${string}" class="o_list_content_web_snippet">${_t('loading ...')}</div>
+                <div id="${id}" data-url="${string}" class="o_list_content_web_snippet">${_t('loading ...')}</div>
                 `;
             }
         },
@@ -143,7 +140,7 @@ odoo.define('renderlistcontent.renderer', function (require) {
         /**
          * @private
          */
-        _parseText: function (text) {
+        _parseText: function (text, id) {
             if (!text) return '';
             const split = text.split('\n');
             return split.map((b) => {
@@ -159,7 +156,7 @@ odoo.define('renderlistcontent.renderer', function (require) {
                     }
                     
                     if (sub) {
-                        return this._checkExtension(sub);
+                        return this._checkExtension(sub, id);
                     } 
                     
                     if (!t) return '';
@@ -196,7 +193,7 @@ odoo.define('renderlistcontent.renderer', function (require) {
             return this._getRenderTagsContext().map((elm) => {
                 let text = '';
                 for (let f in this.fieldsToFetch) {
-                    text += this._parseText(elm[f]);
+                    text += this._parseText(elm[f], elm.id) + ' ';
                 }
                 return text;
             }).join(' ');
