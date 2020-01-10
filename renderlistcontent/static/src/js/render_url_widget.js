@@ -84,7 +84,8 @@ odoo.define('renderlistcontent.renderer', function (require) {
                 const html = new DOMParser().parseFromString(res, 'text/html');
                 const metas = html.head.querySelectorAll('meta[property]');
         
-                const props = ['', '', ''];
+                const tmp = new URL(url);
+                const props = ['Untitled', '', tmp.origin + '/favicon.ico'];
                 for (let i = 0; i < metas.length; i++) {
                     const meta = metas[i];
         
@@ -96,7 +97,6 @@ odoo.define('renderlistcontent.renderer', function (require) {
                         props[1] = _t(meta.content);
                     } else if (prop.indexOf('image') > -1) {
                         if (meta.content.indexOf('http') === -1) {
-                            const tmp = new URL(url); 
                             meta.content = tmp.origin + meta.content
                         }
 
