@@ -26,6 +26,7 @@
 
     # always loaded
     'data': ['assets.xml'],
+    'images': ['static/description/banner.png'],
     
     'qweb': [
         'static/src/xml/render_list_content.xml',
